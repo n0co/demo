@@ -12,7 +12,7 @@ resource "azurerm_resource_group" "main" {
 }
 
 
-resource "azurerm_network_security_group" "main" { # on prem nsg and SSH rule
+resource "azurerm_network_security_group" "main" { # NSG and SSH Rule
   name                = "main-nsg"
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
@@ -35,6 +35,9 @@ module "network" {
   source = "./modules/network"
   resource-group-name = azurerm_resource_group.main.name
   resource-location   = azurerm_resource_group.main.location
+  network_range       = var.network_range
+  subnet_range        = var.subnet_range
+  pip_allocation      = var.pip_allocation
 }
 
 resource "azurerm_subnet_network_security_group_association" "nsg-associationm" { # associate nsg to subnet
