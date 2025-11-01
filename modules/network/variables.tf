@@ -16,5 +16,5 @@ variable "subnet_range" {
 
 variable "pip_allocation" {
   type = string
-  default = "Static"
+  default = "null"
 }

@@ -16,14 +16,31 @@ variable "vmsize" {
   default     = "Standard_F2"
 }
 variable "network_range" {
-  type = list
+  type = list(any)
 }
 
 variable "subnet_range" {
-  type = list
+  type = list(any)
 }
 
 variable "pip_allocation" {
-  type = string
+  type    = string
   default = "Static"
+}
+
+variable "password" {
+  description = "Password for Virtual Machines"
+  type        = string
+  sensitive   = true
+}
+variable "network_range_internal" {
+  type = list(any)
+}
+
+variable "subnet_range_internal" {
+  type = list(any)
+}
+variable "internal_username" {
+  description = "Username for Internal Virtual Machines"
+  default     = "kage"
 }

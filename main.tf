@@ -25,14 +25,14 @@ resource "azurerm_network_security_group" "main" { # NSG and SSH Rule
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "22"
-    source_address_prefix      = "foo-bar"
+    source_address_prefix      = "131.106.46.32"
     destination_address_prefix = "*"
   }
 
 }
 
 module "network" {
-  source = "./modules/network"
+  source              = "./modules/network"
   resource-group-name = azurerm_resource_group.main.name
   resource-location   = azurerm_resource_group.main.location
   network_range       = var.network_range
@@ -82,4 +82,29 @@ resource "azurerm_linux_virtual_machine" "main-vm" {
     sku       = "22_04-lts"
     version   = "latest"
   }
+}
+
+module "internal" {
+  source                 = "./modules/internal-vm"
+  network_range_internal = var.network_range_internal
+  subnet_range_internal  = var.subnet_range_internal
+  password               = var.password
+  username               = var.internal_username
+  resource-group-name    = azurerm_resource_group.main.name
+  resource-location      = azurerm_resource_group.main.location
+  vm_private_ip_address  = module.network.vm_private_ip_address
+}
+
+resource "azurerm_virtual_network_peering" "internal-peer1to2" {
+  name                      = "internal-peer1to2"
+  resource_group_name       = azurerm_resource_group.main.name
+  virtual_network_name      = module.network.vnet_name
+  remote_virtual_network_id = module.internal.internal-vnet-id
+}
+
+resource "azurerm_virtual_network_peering" "internal-peer2to1" {
+  name                      = "internal-peer2to1"
+  resource_group_name       = azurerm_resource_group.main.name
+  virtual_network_name      = module.internal.internal_vnet_name
+  remote_virtual_network_id = module.network.vnet_id
 }
