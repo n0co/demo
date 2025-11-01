@@ -25,7 +25,7 @@ resource "azurerm_network_security_group" "main" { # NSG and SSH Rule
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "22"
-    source_address_prefix      = "131.106.46.32"
+    source_address_prefix      = "foo-bar"
     destination_address_prefix = "*"
   }
 
