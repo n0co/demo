@@ -1,6 +1,6 @@
 variable "username" {
   description = "Username for Virtual Machines"
-  default     = "kage"
+  default     = "kageweb"
 }
 variable "password" {
   description = "Password for Virtual Machines"
@@ -13,13 +13,6 @@ variable "vmsize" {
   default     = "Standard_F2"
 }
 
-variable "network_range_internal" {
-  type = list
-}
-
-variable "subnet_range_internal" {
-  type = list
-}
 
 variable "resource-group-name" {
   type = string
@@ -28,9 +21,7 @@ variable "resource-group-name" {
 variable "resource-location" {
   type = string
 }
-variable "vm_private_ip_address" {
-  type = string
-}
-variable "internal_web_private_ip_address" {
+
+variable "internal_subnet_id" {
   type = string
 }

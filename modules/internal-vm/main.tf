@@ -17,16 +17,16 @@ resource "azurerm_network_security_group" "internal" { # NSG and SSH Rule
   location            = var.resource-location
   resource_group_name = var.resource-group-name
 
-  security_rule {
-    name                       = "Internal-Access"
+    security_rule {
+    name                       = "Internal-Access-Web"
     priority                   = 1001
     direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "*"
     source_port_range          = "*"
-    destination_port_range     = "*"
+    destination_port_range     = "8080"
     source_address_prefix      = "${var.vm_private_ip_address}"
-    destination_address_prefix = "*"
+    destination_address_prefix = "${var.internal_web_private_ip_address}"
   }
 
 }
