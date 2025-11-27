@@ -7,3 +7,6 @@ output "internal-ip" {
 output "internal_vnet_name" {
   value = azurerm_virtual_network.internal.name
 }
+output "internal_subnet_id" {
+  value = azurerm_subnet.internal.id
+}

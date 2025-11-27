@@ -25,7 +25,7 @@ resource "azurerm_network_security_group" "main" { # NSG and SSH Rule
     protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "22"
-    source_address_prefix      = "foo-bar"
+    source_address_prefix      = "foobar"
     destination_address_prefix = "*"
   }
 
@@ -61,7 +61,7 @@ resource "azurerm_key_vault" "main" {
   soft_delete_retention_days  = 7
   purge_protection_enabled    = false
   rbac_authorization_enabled  = false
-  
+
 
   sku_name = "standard"
 
@@ -82,7 +82,7 @@ resource "azurerm_key_vault" "main" {
     ]
 
     secret_permissions = [
-      "Get",   
+      "Get",
       "List",
       "Set",
       "Delete",
@@ -134,14 +134,15 @@ resource "azurerm_linux_virtual_machine" "main-vm" {
 }
 
 module "internal" {
-  source                 = "./modules/internal-vm"
-  network_range_internal = var.network_range_internal
-  subnet_range_internal  = var.subnet_range_internal
-  password               = var.password
-  username               = var.internal_username
-  resource-group-name    = azurerm_resource_group.main.name
-  resource-location      = azurerm_resource_group.main.location
-  vm_private_ip_address  = module.network.vm_private_ip_address
+  source                          = "./modules/internal-vm"
+  network_range_internal          = var.network_range_internal
+  subnet_range_internal           = var.subnet_range_internal
+  password                        = var.password
+  username                        = var.internal_username
+  resource-group-name             = azurerm_resource_group.main.name
+  resource-location               = azurerm_resource_group.main.location
+  vm_private_ip_address           = module.network.vm_private_ip_address
+  internal_web_private_ip_address = module.internal_web.internal_web_ip
 }
 
 resource "azurerm_virtual_network_peering" "internal-peer1to2" {
@@ -157,3 +158,14 @@ resource "azurerm_virtual_network_peering" "internal-peer2to1" {
   virtual_network_name      = module.internal.internal_vnet_name
   remote_virtual_network_id = module.network.vnet_id
 }
+
+
+module "internal_web" {
+  source = "./modules/internal-web"
+
+  resource-group-name = azurerm_resource_group.main.name
+  resource-location   = azurerm_resource_group.main.location
+  internal_subnet_id  = module.internal.internal_subnet_id
+  password            = var.password
+}
+

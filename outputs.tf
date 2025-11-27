@@ -16,3 +16,7 @@ output "vm-public-ip" {
 output "internal_module_outputs" {
   value = module.internal
 }
+
+output "internal_web_module_outputs" {
+  value = module.internal_web
+}

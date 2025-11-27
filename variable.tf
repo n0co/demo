@@ -40,6 +40,7 @@ variable "network_range_internal" {
 variable "subnet_range_internal" {
   type = list(any)
 }
+
 variable "internal_username" {
   description = "Username for Internal Virtual Machines"
   default     = "kage"
